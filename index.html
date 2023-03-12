@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>Music player</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Charmonman:wght@700&display=swap');
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'poppins',sans-serif;
+}
+body{
+	display: grid;
+	place-items: center;
+	min-height: 100vh;
+  background-image: linear-gradient(lightblue, lightgreen,rgb(209, 113, 113));
+}
+ 
+
+.nav{
+    background-color:mediumslateblue;
+    overflow:hidden;
+    padding:20px;
+}
+.nav a{
+    color:mintcream;
+    text-decoration:none;
+    padding:50px;
+}
+.nav a:hover{
+    background-color:orchid;
+}
+.main{
+    position: relative;
+    overflow: hidden;
+    height: 90vh;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+    background: linear-gradient(to bottom right,#673AB7,#7E57C2);
+    box-shadow: 0.1px 4px 8px 4px rgba(0,0,0,0.5);
+}
+.top_section{
+  margin: 1em 0;
+}
+.top_section h5{
+	color: #fff;
+	font-size: 1.5em;
+	font-family: 'Charmonman', cursive;
+}
+.tracks{
+  width: 90%;
+  max-height: 75vh;
+  overflow-y: scroll;
+  padding: 10px 0;
+  padding-bottom: 50px;
+}
+.tracks::-webkit-scrollbar {
+  display: none;
+}
+.tracks .song:not(:first-child){
+  margin-top: 1em;
+}
+.tracks .song{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  padding: 0 5px;
+  border-radius: 0 20px 20px 20px;
+  box-shadow: 0.1px 2px 2px rgba(0,0,0,0.1);
+}
+.tracks .song .more{
+  margin-left: 1.2em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tracks .song .song_info p:nth-child(2){
+  font-size: 0.8em;
+  margin-top: 10px;
+  color: rgba(255,255,255,0.5);
+}
+.tracks .song .song_info p:nth-child(3){
+    font-size: 0.8em;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.5);
+  }
+.tracks .song  #play_btn{
+  height: 50px;
+  width: 50px;
+  border:none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  background: none;
+  color: #fff;
+  box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
+			inset -5px -5px 15px rgba(255,255,255,0.1),
+			-5px -5px 15px rgba(255,255,255,0.1);
+}
+.tracks .song button i{
+			font-size: 1.5em;
+}
+.tracks .song:not(:first-child){
+			margin-top: 15px;
+}
+.tracks .song .img{
+  height: 70px;
+  width: 80px;
+  overflow: hidden;
+  border-radius: 15px;
+}
+.tracks .song .img img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.controlls{
+		   width: 75%;
+		   margin-top: 2.5em;
+}
+.progress_part{
+			width: 100%;
+			margin-bottom: 2em;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+			justify-content: space-between;
+}
+.progress_part p{
+  color: #fff;
+}
+.progress_part .durations{
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+} 
+.progress_part #slider{
+  width: 100%;
+}
+.controlls_btns{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.controlls_btns button{
+  height: 50px;   
+  width: 50px;   
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0 0.5em;
+  background: none;
+  transition: 0.5s;
+  border-radius: 50%;
+}
+.controlls_btns button:hover{	
+  box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
+			inset -5px -5px 15px rgba(255,255,255,0.1),
+			5px 5px 15px rgba(0,0,0,0.3),
+			-5px -5px 15px rgba(255,255,255,0.1);
+}
+.controlls_btns button i{
+  font-size: 1.3em;
+}
+
+.controlls_btns button:nth-child(2){
+  border-radius: 50%;
+  box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
+			inset -5px -5px 15px rgba(255,255,255,0.1),
+			5px 5px 15px rgba(0,0,0,0.3),
+			-5px -5px 15px rgba(255,255,255,0.1);
+}
+.controlls_btns button i{
+  color: #fff;
+}
+#slider{
+  -webkit-appearance: none;
+  outline: none;
+  width: 85%;
+  height: 4px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  background: #673AB7;
+  box-shadow: 0.1px 8px 8px 2px rgba(0,0,0,0.2) inset,
+	            0.1px 8px 8px 2px rgba(0,0,0,0.2);
+}
+.main .popup_music_player{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #673AB7;
+  padding: 5px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 15px 15px 0 0;
+  transform: translateY(110%);
+  transition: 0.4s;
+  box-shadow: 0.1px 4px 8px 4px rgba(0,0,0,0.5);
+}
+.top{
+  width: 100%;
+  padding: 10px 20px;
+  color: #ccc;
+  font-size: 1.2em;
+  display: flex;
+  justify-content: space-between;
+}
+.top p{
+  font-family: 'Charmonman', cursive;
+}
+.top i{
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+background: rgba(255,255,255,0.1);
+}
+.popup_music_player .song_img{
+margin-top: 2em;
+height: 200px;
+width: 200px;
+border-radius: 50%;
+overflow: hidden;
+box-shadow: inset 5px 5px 5px rgba(0,0,0,0.2),
+            inset -5px -5px 15px rgba(255,255,255,0.1),
+			5px 5px 15px rgba(0,0,0,0.3),
+			-5px -5px 15px rgba(255,255,255,0.1);
+}
+.popup_music_player img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.song_description{
+  margin-top: 2em;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.song_description h3{
+  font-size: 1.2em;
+  color: #fff;
+}
+.song_description p{
+  color: #ccc;
+  margin-top: 5px;
+}
+.small_music_player{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  border-radius: 20px 20px 0 0;
+  background: #673AB7;
+  transition: 0.4s;
+  transform: translateY(80px);
+}
+.s_player_img{
+  position: relative;
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-right: 2em;
+  box-shadow: 0.1px 4px 8px 5px rgba(0,0,0,0.3);
+}
+.playing_img{
+  height: 100%;
+  width: 100%;
+  opacity: 0.5;
+}
+.small_music_player p{
+  color: #fff;
+}
+.s_player_img .playing_img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#up_player{
+  position: absolute;
+  right: 20px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);	
+}
+#artist_name{
+  font-size: 0.8em;
+  margin-top: 5px;
+  color: rgba(255,255,255,0.5);
+}
+.wave_animation{
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  opacity: 0;
+}
+.wave_animation li{
+  list-style: none;
+  width: 5px;
+  margin: 0 3px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.4);
+  animation: animate 0.5s linear alternate infinite;			
+}
+.wave_animation li:nth-child(2){
+  animation-delay: 0.4s;
+}
+.wave_animation li:nth-child(3){
+  animation-delay: 1s;
+}
+.wave_animation li:nth-child(4){
+  animation-delay: 0.4s;
+}
+.wave_animation li:nth-child(5){
+  animation-delay: 1s;
+}
+@keyframes animate {
+  0%{
+    height: 0px;
+  }
+  100%{
+	height: 20px;
+  }
+}
+</style>
+<body>
+    <div class="nav">
+        <a href="index.html" >Home</a>
+        <a href="new.html" target="_blank">New Releases</a>
+
+    </div>
+    
+<div class="main">
+    <div class="top_section">
+  		<h5>Music Player&nbsp;&nbsp;<i class="fa fa-headphones" aria-hidden="true"></i></h5>
+        <h5>All Songs</h5>
+  	</div>
+  <div class="tracks">
+    <div class="small_music_player">
+    	<div class="s_player_img">
+    		<div class="playing_img">
+    			<img src="images/1.jpg" alt="">
+    		</div>
+    	   <div class="wave_animation">
+			 <li></li>
+			 <li></li>
+			 <li></li>
+			 <li></li>
+			 <li></li>
+	       </div>
+	    </div>
+    	<div class="song_detail">
+    		<p id="song_name">Ulaginil Miga</p>
+    		<p id="artist_name">Vijay antony</p>
+    	</div>
+    	<i class="fa fa-chevron-up" aria-hidden="true" id="up_player"></i>
+    </div>
+    <div class="popup_music_player">
+         <div class="top">
+    	    <p>Now Playing</p>
+    	    <i class="fa fa-chevron-down" aria-hidden="true" id="down_player"></i>
+        </div>        
+       <div class="song_img">
+          <img src="images/1.jpg" alt="">
+       </div>
+       <div class="song_description">
+        <h3 id="current_track_name">Ulaginil Miga</h3>
+        <p id="current_singer_name">Vijay antony</p>
+        <p id="current_musician_name">Vijay antony</p>
+
+       </div>
+       <div class="controlls">
+    	 <div class="progress_part">
+    		<input type="range" min="0" max="100" value="0" id="slider" onchange="change_duration()">
+    		<div class="durations">
+    			<p id="current_duration">0:00</p>
+    		    <p id="total_duration">0:00</p>
+    		</div>
+       </div>
+        <div class="controlls_btns">
+			<button id="backward_btn"><i class="fa fa-step-backward" aria-hidden="true"></i></button>
+			<button id="play_pause_btn"><i class="fa fa-play" aria-hidden="true"></i></button>
+			<button id="forward_btn"><i class="fa fa-step-forward" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </div>
+</div>
+<script>
+let All_song = [
+{
+    name: "Puli Manga Pulip-Parris Jeyaraj",
+    path: "songs/Puli Manga Pulip.mp3",
+    img: "images/parris.jfif",
+    singer: "Gana Muthu",
+    musician:"Santhosh Narayanan"
+  },
+  {
+    name: "Ennamo Seithai nee-Kadhal Na Summa Illa",
+    path: "songs/Ennamo saithai nee.mp3",
+    img: "images/en.jpg",
+    singer: "Udit Narayan,Sujatha Mohan",
+    musician:"Vidyasagar,Mani Sharma"
+  },
+  {
+    name: "Marandhaye-Teddy",
+    path: "songs/Marandhaye.mp3",
+    img: "images/teddy.jpg",
+    singer: "D. Imman, Pradeep Kumar, Jonita Gandhi",
+    musician:"D. Imman"
+  },
+  {
+    name: "Nanbiye-Teddy",
+    path: "songs/Nanbiye.mp3",
+    img: "images/teddy.jpg",
+    singer: "D. Imman",
+    musician:"D. Imman"
+  },
+  {
+    name: "En-Iniya-Thanimaiye-Teddy",
+    path: "songs/En-Iniya-Thanimaiye.mp3",
+    img: "images/teddy.jpg",
+    singer: "D. Imman, Sid Sriram",
+    musician:"D. Imman"
+  },
+  {
+    name: "Munbe Vaa En Vaa-Sillunu Oru Kaadhal",
+    path: "songs/Munbe-Vaa-En-Vaa.mp3",
+    img: "images/sok.jpg",
+    singer: "Naresh Iyer & Shreya Ghoshal",
+    musician:"A.R.Rahman"
+  },
+  {
+    name: "Kadhal Kappal-Iraivi",
+    path: "songs/Kadhal-Kappal.mp3",
+    img: "images/iraivi.jpg",
+    singer: "Santhosh Narayanan",
+    musician:"Santhosh Narayanan"
+  },
+  {
+    name: "Kathari Poovazhagi-Asuran",
+    path: "songs/Kathari Poovazhagi.mp3",
+    img: "images/asuran.jpg",
+    singer: "Velmurugan, Rajalakshmi, Napoleya",
+    musician:"G. V. Prakash Kumar"
+  },
+  {
+    name: "Ulagnil Miga Uyaram-Naan",
+    path: "songs/Ulaginil-Miga.mp3",
+    img: "images/naan.jpg",
+    singer: "Vijay Antony",
+    musician:"Vijay Antony"
+  },
+  {
+    name: "Nee Unnai Maatrikondal-Thimiru Pudichavan  ",
+    path: "songs/Nee-Unnai-Matrikondal.mp3",
+    img: "images/tf.jfif",
+    singer: "Haricharan,Vijay Antony",
+    musician:"Vijay Antony"
+  },
+  {
+    name: "Andavane Thunaiyai-Kolaigaran",
+    path: "songs/Andavane-Thunai.mp3",
+    img: 'images/k.gif',
+    singer: "Sivam",
+    musician:"Simon"
+  },
+  {
+    name: "Thappellam Thappe illai-Naan",
+    path: "songs/Thappellam-Thappe-illai.mp3",
+    img: "images/naan.jpg",
+    singer: "Adhi, Santhosh Hariharan",
+    musician:"Vijay Antony"
+    
+  },
+  {
+    name: "Unnai Kanda Naal-Salim",
+    path: "songs/Unnai-Kanda-Naal.mp3",
+    img: "images/salim.jpg",
+    singer: "Supriya joshi, Hemachandra, Srinivasan",
+    musician:"Vijay Antony"
+  },
+  {
+   name: "Ulagam Unnai-Salim",
+   path: "songs/Ulagam-Unnai.mp3",
+   img: "images/salim.jpg",
+   singer: "Prabhu Pandala",
+   musician:"Vijay Antony"
+  },
+  {
+      name: "Thangama Vairama-Annadurai",
+      path: "songs/Thangama-Vairama.mp3",
+      img: "images/anna.webp",
+      singer: "Vijay Antony",
+      musician:"Vijay Antony"
+     },
+     {
+      name: "Aatichudi-TN 47 AL 4777",
+      path: "songs/Aathichudi.mp3",
+      img: "images/tn.jpg",
+      singer: "Vijay Antony, Dinesh Kanagaratnam",
+      musician:"Vijay Antony"
+     },
+  
+{
+  name: "Yedho Ondru Ennai-Paiya",
+  path: "songs/Yedho-Ondru-Ennai.mp3",
+  img: "images/paiya.jpg",
+  singer: "Yuvan Shankar Raja",
+  musician:"Yuvan Shankar Raja"
+  
+},
+{
+  name: "En Kadhal Solla-Paiya ",
+  path: "songs/En-Kadhal-Solla.mp3",
+  img: "images/paiya.jpg",
+  singer: "Yuvan Shankar Raja",
+  musician:"Yuvan Shankar Raja "
+},
+{
+  name: "Edhirthu Nil-Briyani",
+  path: "songs/Edhirthu-Nil.mp3",
+  img: 'images/bri.jpg',
+  singer: "Yuvan Shankar raja,G.V.Prakash Kumar, Vijay Antony, D.Imman, S.Thaman",
+  musician:"Yuvan Shankar Raja"
+},
+{
+  name: "Kadhal-Aasai-Anjaan",
+  path: "songs/Kadhal-Aasai.mp3",
+  img: "images/anjaan.jpg",
+  singer: "Yuvan Shankar Raja, Sooraj Santhosh",
+  musician:"Yuvan Shankar Raja"
+},
+{
+  name: "Andha Kanna Paathaaka-Master",
+  path: "songs/Andha-Kanna-Paathaaka.mp3",
+  img: "images/master.jpg",
+  singer: "Yuvan Shankar Raja",
+  musician:"Yuvan Shankar Raja "
+},
+{
+ name: "Oru Kal-Siva Manasula Sakthi",
+ path: "songs/Oru-Kal.mp3",
+ img: "images/sms.jfif",
+ singer: "Yuvan Shankar Raja",
+ musician:"Yuvan Shankar Raja "
+},
+{
+    name: "Loosu Penne",
+    path: "songs/Loosu Penne.mp3",
+    img: "images/lp.jpg",
+    singer: "Silambarasan, Blaaze",
+    musician:"Yuvan Shankar Raja"
+   },
+   {
+    name: "Hello",
+    path: "songs/Hello.mp3",
+    img: "images/hello.jpg",
+    singer: "Devan Ekambaram",
+    musician:"Yuvan Shankar Raja"
+   },
+
+     {
+        name: "Jee Boomba-Jay Jay",
+        path: "songs/Jee-Boomba.mp3",
+        img: "images/jay.jfif",
+        singer: "Boney Chakravarthy",
+        musician:"Bharathwaj"
+       },
+  
+     {
+        name: "Kadhal Mazhaiye-Jay Jay",
+        path: "songs/Kadhal-Mazhaiye.mp3",
+        img: "images/jay.jfif",
+        singer: "Srinivas",
+        musician:"Bharathwaj"
+       }
+     
+
+
+];
+let tracks = document.querySelector('.tracks');
+for (let i = 0; i < All_song.length; i++) {
+let Html = ` <div class="song">
+   <div class="img">
+   <img src="${All_song[i].img}"/>
+   </div>
+   <div class="more">
+   <audio src="${All_song[i].path}" id="music"></audio>
+   <div class="song_info">
+      <p id="title">${All_song[i].name}</p>
+      <p>Singer - ${All_song[i].singer}</p>
+      <p>Music By - ${All_song[i].musician}</p>
+   </div>
+   <button id="play_btn"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+   </div>
+ </div>`;
+tracks.insertAdjacentHTML("beforeend", Html);
+};
+</script>
+<script>
+    let btn = document.querySelectorAll('.song #play_btn');
+let song = document.querySelectorAll('#music');
+let p_m_player = document.querySelector('.popup_music_player');
+let down_player = document.querySelector('#down_player');
+let current_track_name = document.querySelector('#current_track_name');
+let current_singer_name = document.querySelector('#current_singer_name');
+let current_musician_name= document.querySelector('#current_musician_name');
+let song_img = document.querySelector('.song_img');
+let play_pause_btn = document.querySelector('#play_pause_btn');
+let slider = document.querySelector('#slider');
+let forward_btn = document.querySelector('#forward_btn');
+let backward_btn = document.querySelector('#backward_btn');
+let current_duration = document.querySelector('.controlls .progress_part #current_duration');
+let total_duration = document.querySelector('.controlls .progress_part #total_duration');
+let s_m_player = document.querySelector('.small_music_player');
+let playing_img = document.querySelector('.playing_img');
+let wave_animation = document.querySelector('.wave_animation');
+let up_player = document.querySelector('#up_player');
+let song_name = document.querySelector('#song_name');
+let artist_name = document.querySelector('#artist_name');
+
+let is_song_played = false;
+let song_status = false;
+let index_no = 0;
+btn.forEach((btn,index) => {
+  btn.addEventListener('click', function(){
+    s_m_player.style.transform = 'translateY(0px)';    
+    if (index != index_no) {
+      song_status = false;
+    }
+    index_no = index;
+    song[index].currentTime = 0;
+  	if (song_status == false) {
+      play_song();
+  	}else{
+      pause_song();	 
+  	}
+  });
+});
+function pause_song(){
+  song[index_no].pause();
+  song_status = false;
+  clearInterval(update_second);
+  wave_animation.style.opacity = '0';
+  play_pause_btn.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+}
+ function update_second(){
+	  let position = 0;
+		if(!isNaN(song[index_no].duration)){
+		   position = song[index_no].currentTime * (100 / song[index_no].duration);
+		   slider.value =  position;
+	      }
+    let durationMinutes = Math.floor(song[index_no].duration / 60);
+    let durationSeconds = Math.floor(song[index_no].duration - durationMinutes * 60);
+    total_duration.textContent = durationMinutes + ":" + durationSeconds;
+    let curr_minutes = Math.floor(song[index_no].currentTime / 60);
+    let curr_seconds = Math.floor(song[index_no].currentTime - curr_minutes * 60);
+    if (curr_seconds < 10) { curr_seconds = "0" + curr_seconds; }
+    if (durationSeconds < 10) { durationSeconds = "0" + durationSeconds; }
+    current_duration.textContent = curr_minutes + ":" + curr_seconds;
+	if (song[index_no].ended) {
+      clearInterval(update_second);
+  	  wave_animation.style.opacity = '0';
+      play_pause_btn.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+    }
+ }
+up_player.addEventListener('click', function(){
+   p_m_player.style.transform = 'translateY(0%)';
+});
+down_player.addEventListener('click', function(){
+   p_m_player.style.transform = 'translateY(110%)';
+});
+play_pause_btn.addEventListener('click', function(){
+    if (song_status == false) {
+  		song[index_no].play();
+      song_status = true;
+      wave_animation.style.opacity = '1';
+  		this.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
+  	}else{
+  		song[index_no].pause();
+      song_status = false;
+      wave_animation.style.opacity = '0';
+      this.innerHTML = '<i class="fa fa-play" aria-hidden="true"></i>';
+  	}
+});
+function change_duration(){
+	slider_position = song[index_no].duration * (slider.value / 100);
+	song[index_no].currentTime = slider_position;
+}
+forward_btn.addEventListener('click', function(){
+   
+   index_no = index_no + 1;
+    if (index_no == All_song.length) {
+      index_no = 0;
+    }
+    song[index_no].currentTime = 0;
+      play_song();
+});
+backward_btn.addEventListener('click', function(){
+    
+    if (index_no == 0) {
+      index_no = All_song.length-1;
+    }else{
+      index_no = index_no -1;
+    }
+    song[index_no].currentTime = 0;
+    play_song();
+});
+function play_song(){
+  song[index_no].play();  
+  if (is_song_played == true) {
+      document.querySelector(".active_song").pause();
+      document.querySelector(".active_song").classList.remove("active_song");
+  }else{
+        is_song_played = true;
+    }   
+  song[index_no].classList.add("active_song");
+  song_status = true;
+  setInterval(update_second, 1000);
+  wave_animation.style.opacity = '1';
+  p_m_player.style.transform = 'translateY(0%)';
+  song_img.innerHTML = `<img src="${All_song[index_no].img}" />`;
+  playing_img.innerHTML = `<img src="${All_song[index_no].img}" />`;
+  song_name.innerHTML = All_song[index_no].name;
+  artist_name.innerHTML = All_song[index_no].singer;
+  current_track_name.innerHTML = All_song[index_no].name;
+  current_singer_name.innerHTML ="Singer - "+ All_song[index_no].singer;
+  current_musician_name.innerHTML ="Music By - "+ All_song[index_no].musician;
+  
+  play_pause_btn.innerHTML = '<i class="fa fa-pause" aria-hidden="true"></i>';
+}
+</script>
+</body>
+</html>
